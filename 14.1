@@ -1,0 +1,27 @@
+path = r'd:\My Documents\Desktop\study\pydata-book-2nd-edition\datasets\bitly_usagov\example.txt'
+open(path).readline()
+
+import json
+path = r'd:\My Documents\Desktop\study\pydata-book-2nd-edition\datasets\bitly_usagov\example.txt'
+records = [json.loads(line) for line in open(path)] #用loads 函数将json转换为python的字典对象
+
+time_zones = [rec['tz'] for rec in records] #以下报错表明并非每条记录里都有‘tz’需加上if 'tz' in rec
+
+time_zones = [rec['tz'] for rec in records if 'tz' in rec] 
+time_zones[:10]
+
+def get_counts(sequence):
+    counts = {}
+    for x in sequence:
+        if x in counts:
+            counts[x] += 1
+        else:
+            counts[x] = 1
+    return counts
+counts = get_counts(time_zones)
+
+def top_counts(count_dict, n=10):
+    value_key_pairs = [(count, tz) for tz, count in count_dict.items()]
+    value_key_pairs.sort()
+    return value_key_pairs[-n:]
+top_counts(counts)
